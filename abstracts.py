@@ -32,8 +32,12 @@ class BaseManager(metaclass=abc.ABCMeta):
 		self.db_path = db_path
 
 	@abc.abstractmethod
-	def write(self, lable, time=None, **args) -> ReadResponse:
+	def toggle(self, lable, time=None) -> ReadResponse:
 		# return time of task in secs
+		pass
+	
+	@abc.abstractmethod
+	def new(self, lable, **kwargs):
 		pass
 
 	@abc.abstractmethod
