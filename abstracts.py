@@ -61,3 +61,7 @@ class BaseManager(metaclass=abc.ABCMeta):
 	@abc.abstractmethod
 	def delete(self, lable) -> ReadResponse:
 		pass
+	
+	@abc.abstractmethod
+	def update(self, lable, key, value):
+		pass
