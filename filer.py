@@ -38,12 +38,12 @@ class Manager(abstracts.BaseManager):
             self.stop_all_except(lable, update_db=False)
         self._update_db()
         
-        return self._to_readresponse(self.data[lable])
+        return self._to_readresponse(lable, self.data[lable])
     
     def _to_readresponse(self, lable, data):
         return abstracts.ReadResponse(
             lable,
-            self._calc_time(data['times']),
+            self._calc_time(data),
             data['times'],
             **data['kwargs']
         )
@@ -53,7 +53,8 @@ class Manager(abstracts.BaseManager):
             "times": [],
             "kwargs": kwargs
         }
-        return self._to_readresponse(self.data[lable])
+        self._update_db()
+        return self._to_readresponse(lable, self.data[lable])
 
     def stop_all_except(self, lable, update_db=True):
         for loop_lable, data in self.data.items():
@@ -93,14 +94,7 @@ class Manager(abstracts.BaseManager):
         self._update_data()
         if self.exists(lable):
             data = self.data[lable]
-            
-            whole_time = self._calc_time(data)
-
-            return [
-                int(whole_time), 
-                lable, 
-                abstracts.STATES.str(data[-1]['state'])
-            ]
+            return self._to_readresponse(lable, data)
         if raise_error:
             raise Exception("No Lable Exist")
     
@@ -111,16 +105,22 @@ class Manager(abstracts.BaseManager):
         def cb(item):
             lable = item[0]
             data = item[1]
-            return lable, abstracts.STATES.str(data[-1]['state'])
+            return self._to_readresponse(lable, data)
         return list(map(cb, self.data.items()))
 
     def delete(self, lable):
         result = self.data.pop(lable, None)
-        self._update_db()
-        return result
+        if result:
+            self._update_db()
+            return self._to_readresponse(lable, result)
     
     def rename(self, old, new):
         if self.exists(old):
             data = self.data.pop(old)
             self.data[new] = data
+            self._update_db()
+    
+    def update(self, lable, key, value):
+        if self.exists(lable, False):
+            self.data[lable]['kwargs']['key'] = value
             self._update_db()
