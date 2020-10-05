@@ -38,13 +38,23 @@ class Manager(abstracts.BaseManager):
             self.stop_all_except(lable, update_db=False)
         self._update_db()
         
+        return self._to_readresponse(self.data[lable])
+    
+    def _to_readresponse(self, lable, data):
         return abstracts.ReadResponse(
             lable,
-            self._calc_time(self.data[lable]),
-            self.data[lable]['times'],
-            **self.data[lable]['kwargs']
+            self._calc_time(data['times']),
+            data['times'],
+            **data['kwargs']
         )
-    
+
+    def new(self, lable, **kwargs):
+        self.data[lable] = {
+            "times": [],
+            "kwargs": kwargs
+        }
+        return self._to_readresponse(self.data[lable])
+
     def stop_all_except(self, lable, update_db=True):
         for loop_lable, data in self.data.items():
             if lable == loop_lable:
