@@ -103,3 +103,9 @@ class Manager(abstracts.BaseManager):
         result = self.data.pop(lable, None)
         self._update_db()
         return result
+    
+    def rename(self, old, new):
+        if self.exists(old):
+            data = self.data.pop(old)
+            self.data[new] = data
+            self._update_db()
