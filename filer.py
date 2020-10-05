@@ -22,26 +22,25 @@ class Manager(abstracts.BaseManager):
         self.data = pickle.load(file)
         file.close()
     
-    def write(self, lable, time=None):
+    def write(self, lable, time=None, **kwargs):
         if not time:
             time = dt.now()
-        if self.data.get(lable, None):
-            data = self.data.get(lable)[-1]
-            self.data[lable].append({
-                "time": time,
-                "state": abstracts
-                            .STATES
-                            .value(
-                                not data.get('state')
-                            )
-            })
-        else:
-            self.data[lable] = [
-                {
-                    "time": time,
-                    "state": abstracts.STATES.PROGRESS
-                }
-            ]
+        if not self.data.get(lable, False):
+            self.data[lable] = []
+
+        data = self.data[lable]
+        state = data[-1]['state'] if len(data) > 0 \
+                                else abstracts.STATES.END
+        self.data[lable].append({
+            "time": time,
+            "state": not state,
+            "kwargs": kwargs
+        })
+
+        self.stop_all_except(lable, update_db=False)
+        self._update_db()
+    
+    def stop_all_except(self, lable, update_db=True):
         for loop_lable, data in self.data.items():
             if lable == loop_lable:
                 continue
@@ -53,26 +52,28 @@ class Manager(abstracts.BaseManager):
                     "state": abstracts.STATES.END
                 })
             self.data[loop_lable] = data
-        self._update_db()
+        
+        if update_db:
+            self._update_db()
     
     def _calc_time(self, record):
         whole = 0
         tmp_a = 0
         tmp_b = 0
         last_progress_calc = False
-        for i in range(len(data)):
+        for i in range(len(record)):
             if i % 2 == 0:
                 # state is PROGRESS
-                tmp_a = data[i]['time'].timestamp()
+                tmp_a = record[i]['time'].timestamp()
             else:
                 # state is END
-                tmp_b = data[i]['time'].timestamp()
+                tmp_b = record[i]['time'].timestamp()
                 whole += (tmp_b - tmp_a)
 
-        if len(data) % 2 == 1:
+        if len(record) % 2 == 1:
             whole += (
                 dt.now().timestamp() 
-                - data[-1]['time'].timestamp()
+                - record[-1]['time'].timestamp()
             )
         
         return whole
@@ -97,3 +98,8 @@ class Manager(abstracts.BaseManager):
             data = item[1]
             return lable, abstracts.STATES.str(data[-1]['state'])
         return list(map(cb, self.data.items()))
+
+    def delete(self, lable):
+        result = self.data.pop(lable, None)
+        self._update_db()
+        return result
