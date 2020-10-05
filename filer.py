@@ -84,3 +84,11 @@ class Manager(abstracts.BaseManager):
     
     def exists(self, lable):
         return bool(self.data.get(lable, None))
+    
+    def all(self):
+        def cb(item):
+            lable = item[0]
+            data = item[1]
+            return lable, abstracts.STATES.str(data[-1]['state'])
+        print(self.data.items())
+        return list(map(cb, self.data.items()))
