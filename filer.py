@@ -55,30 +55,36 @@ class Manager(abstracts.BaseManager):
             self.data[loop_lable] = data
         self._update_db()
     
+    def _calc_time(self, record):
+        whole = 0
+        tmp_a = 0
+        tmp_b = 0
+        last_progress_calc = False
+        for i in range(len(data)):
+            if i % 2 == 0:
+                # state is PROGRESS
+                tmp_a = data[i]['time'].timestamp()
+            else:
+                # state is END
+                tmp_b = data[i]['time'].timestamp()
+                whole += (tmp_b - tmp_a)
+
+        if len(data) % 2 == 1:
+            whole += (
+                dt.now().timestamp() 
+                - data[-1]['time'].timestamp()
+            )
+        
+        return whole
+    
     def read(self, lable, raise_error=False):
         self._update_data()
         if self.exists(lable):
             data = self.data[lable]
-            whole = 0
-            tmp_a = 0
-            tmp_b = 0
-            last_progress_calc = False
-            for i in range(len(data)):
-                if i % 2 == 0:
-                    # state is PROGRESS
-                    tmp_a = data[i]['time'].timestamp()
-                else:
-                    # state is END
-                    tmp_b = data[i]['time'].timestamp()
-                    whole += (tmp_b - tmp_a)
- 
-            if len(data) % 2 == 1:
-                whole += (
-                    dt.now().timestamp() 
-                    - data[-1]['time'].timestamp()
-                )
+            
+            whole_time = self._calc_time(data)
 
-            return [int(whole), lable, abstracts.STATES.str(data[-1]['state'])]
+            return [int(whole_time), lable, abstracts.STATES.str(data[-1]['state'])]
         if raise_error:
             raise Exception("No Lable Exist")
     
