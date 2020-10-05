@@ -22,35 +22,35 @@ class Manager(abstracts.BaseManager):
         self.data = pickle.load(file)
         file.close()
     
-    def write(self, lable, time=None, **kwargs):
+    def is_inprogress(self, times):
+        return len(times) % 2 == 1
+
+    def toogle(self, lable, time=None):
+        if not self.exists(lable):
+            return None
+        
         if not time:
             time = dt.now()
-        if not self.data.get(lable, False):
-            self.data[lable] = []
 
-        data = self.data[lable]
-        state = data[-1]['state'] if len(data) > 0 \
-                                else abstracts.STATES.END
-        self.data[lable].append({
-            "time": time,
-            "state": not state,
-            "kwargs": kwargs
-        })
-
-        self.stop_all_except(lable, update_db=False)
+        self.data[lable]['times'].append(time)
+        
+        if self.is_inprogress(self.data[lable]['times']):
+            self.stop_all_except(lable, update_db=False)
         self._update_db()
+        
+        return abstracts.ReadResponse(
+            lable,
+            self._calc_time(self.data[lable]),
+            self.data[lable]['times'],
+            **self.data[lable]['kwargs']
+        )
     
     def stop_all_except(self, lable, update_db=True):
         for loop_lable, data in self.data.items():
             if lable == loop_lable:
                 continue
-            if abstracts \
-                .STATES \
-                .is_progress(data[-1]['state']):
-                data.append({
-                    "time": time,
-                    "state": abstracts.STATES.END
-                })
+            if self.is_inprogress(data['times']):
+                data['times'].append(dt.now())
             self.data[loop_lable] = data
         
         if update_db:
@@ -60,20 +60,21 @@ class Manager(abstracts.BaseManager):
         whole = 0
         tmp_a = 0
         tmp_b = 0
+        record = record['times']
         last_progress_calc = False
         for i in range(len(record)):
             if i % 2 == 0:
-                # state is PROGRESS
-                tmp_a = record[i]['time'].timestamp()
+                # its a start time
+                tmp_a = record[i].timestamp()
             else:
-                # state is END
-                tmp_b = record[i]['time'].timestamp()
+                # its end time
+                tmp_b = record[i].timestamp()
                 whole += (tmp_b - tmp_a)
 
         if len(record) % 2 == 1:
             whole += (
                 dt.now().timestamp() 
-                - record[-1]['time'].timestamp()
+                - record[-1].timestamp()
             )
         
         return whole
