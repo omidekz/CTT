@@ -1,5 +1,5 @@
 import abc
-from typing import List
+from typing import List, Tuple
 
 class STATES:
 	END = False
@@ -31,7 +31,7 @@ class BaseManager(metaclass=abc.ABCMeta):
 		pass
 
 	@abc.abstractmethod
-	def read(self, lable) -> [int, str, str]:
+	def read(self, lable) -> List[int, str, str]:
 		# return a list that i called resp
 		# resp[0] => time on this lable in secs
 		# resp[1] => lable
@@ -39,9 +39,11 @@ class BaseManager(metaclass=abc.ABCMeta):
 		pass
 	
 	@abc.abstractmethod
-	def exists(self, lable):
+	def exists(self, lable) -> bool:
+		# check existence of lable
 		pass
 	
 	@abc.abstractmethod
-	def all(self):
+	def all(self) -> List[Tuple[str, str]]:
+		# return whole key and state
 		pass
