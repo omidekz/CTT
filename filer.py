@@ -85,7 +85,11 @@ class Manager(abstracts.BaseManager):
             
             whole_time = self._calc_time(data)
 
-            return [int(whole_time), lable, abstracts.STATES.str(data[-1]['state'])]
+            return [
+                int(whole_time), 
+                lable, 
+                abstracts.STATES.str(data[-1]['state'])
+            ]
         if raise_error:
             raise Exception("No Lable Exist")
     
