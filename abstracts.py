@@ -12,6 +12,14 @@ class STATES:
 	@staticmethod
 	def value(state):
 		return STATES.END if state == STATES.END else STATES.PROGRESS
+	
+	@staticmethod
+	def is_progress(state):
+		return STATES.PROGRESS == state
+	
+	@staticmethod
+	def is_end(state):
+		return STATES.END == state
 
 class BaseManager(metaclass=abc.ABCMeta):
 	def __init__(self, db_path):
