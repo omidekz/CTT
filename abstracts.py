@@ -1,5 +1,4 @@
 import abc
-from typing import List, Tuple
 
 class STATES:
 	END = False
@@ -26,7 +25,7 @@ class BaseManager(metaclass=abc.ABCMeta):
 		self.db_path = db_path
 
 	@abc.abstractmethod
-	def write(self, lable, time=None) -> int:
+	def write(self, lable, time=None, **args) -> int:
 		# return time of task in secs
 		pass
 
