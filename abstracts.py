@@ -41,3 +41,7 @@ class BaseManager(metaclass=abc.ABCMeta):
 	@abc.abstractmethod
 	def exists(self, lable):
 		pass
+	
+	@abc.abstractmethod
+	def all(self):
+		pass
