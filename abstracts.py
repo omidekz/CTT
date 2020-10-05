@@ -31,7 +31,7 @@ class BaseManager(metaclass=abc.ABCMeta):
 		pass
 
 	@abc.abstractmethod
-	def read(self, lable) -> List[int, str, str]:
+	def read(self, lable) -> [int, str, str]:
 		# return a list that i called resp
 		# resp[0] => time on this lable in secs
 		# resp[1] => lable
@@ -44,6 +44,6 @@ class BaseManager(metaclass=abc.ABCMeta):
 		pass
 	
 	@abc.abstractmethod
-	def all(self) -> List[Tuple[str, str]]:
+	def all(self) -> [[str, str]]:
 		# return whole key and state
 		pass
