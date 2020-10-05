@@ -25,7 +25,7 @@ class Manager(abstracts.BaseManager):
     def is_inprogress(self, times):
         return len(times) % 2 == 1
 
-    def toogle(self, lable, time=None):
+    def toggle(self, lable, time=None):
         if not self.exists(lable):
             return None
         
