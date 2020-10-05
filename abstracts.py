@@ -1,5 +1,12 @@
 import abc
 
+class ReadResponse:
+	def __init__(self, lable, whole_time, times, **kwargs):
+		self.lable = lable
+		self.whole_secs = whole_time
+		self.times = times
+		self.kwargs = kwargs
+
 class STATES:
 	END = False
 	PROGRESS = True
@@ -25,12 +32,12 @@ class BaseManager(metaclass=abc.ABCMeta):
 		self.db_path = db_path
 
 	@abc.abstractmethod
-	def write(self, lable, time=None, **args) -> int:
+	def write(self, lable, time=None, **args) -> ReadResponse:
 		# return time of task in secs
 		pass
 
 	@abc.abstractmethod
-	def read(self, lable) -> [int, str, str]:
+	def read(self, lable) -> ReadResponse:
 		# return a list that i called resp
 		# resp[0] => time on this lable in secs
 		# resp[1] => lable
@@ -43,10 +50,10 @@ class BaseManager(metaclass=abc.ABCMeta):
 		pass
 	
 	@abc.abstractmethod
-	def all(self) -> [[str, str]]:
+	def all(self) -> [ReadResponse]:
 		# return whole key and state
 		pass
 	
 	@abc.abstractmethod
-	def delete(self, lable):
+	def delete(self, lable) -> ReadResponse:
 		pass
