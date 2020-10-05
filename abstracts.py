@@ -46,3 +46,7 @@ class BaseManager(metaclass=abc.ABCMeta):
 	def all(self) -> [[str, str]]:
 		# return whole key and state
 		pass
+	
+	@abc.abstractmethod
+	def delete(self, lable):
+		pass
