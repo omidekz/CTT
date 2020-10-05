@@ -90,5 +90,4 @@ class Manager(abstracts.BaseManager):
             lable = item[0]
             data = item[1]
             return lable, abstracts.STATES.str(data[-1]['state'])
-        print(self.data.items())
         return list(map(cb, self.data.items()))
