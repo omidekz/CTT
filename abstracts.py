@@ -6,6 +6,15 @@ class ReadResponse:
 		self.whole_secs = whole_time
 		self.times = times
 		self.kwargs = kwargs
+	
+	def __str__(self):
+		return str(
+			{
+				"lable": self.lable,
+				"time_in_sec": self.whole_secs,
+				"kwargs": self.kwargs
+			}
+		)
 
 class STATES:
 	END = False
