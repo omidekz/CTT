@@ -15,6 +15,9 @@ class ReadResponse:
 				"kwargs": self.kwargs
 			}
 		)
+	
+	def __repr__(self):
+		return str(self)
 
 class STATES:
 	END = False
