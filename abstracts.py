@@ -1,3 +1,4 @@
+import os.path
 import abc
 
 class ReadResponse:
@@ -40,8 +41,13 @@ class STATES:
 		return STATES.END == state
 
 class BaseManager(metaclass=abc.ABCMeta):
+	DBs_DIRECTORY = './data/'
 	def __init__(self, db_path):
-		self.db_path = db_path
+		if '/' in db_path:
+			raise Exception('"{}" is not correct name'.format(db_path))
+		if not os.path.exists(BaseManager.DBs_DIRECTORY):
+			os.mkdir(BaseManager.DBs_DIRECTORY)
+		self.db_path = BaseManager.DBs_DIRECTORY + db_path
 
 	@abc.abstractmethod
 	def toggle(self, lable, time=None) -> ReadResponse:
