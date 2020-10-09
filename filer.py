@@ -71,9 +71,8 @@ class Manager(abstracts.BaseManager):
         whole = 0
         tmp_a = 0
         tmp_b = 0
-        record = record['times']
-        last_progress_calc = False
-        for i in range(len(record)):
+        times = record['times']
+        for i in range(len(times)):
             if i % 2 == 0:
                 # its a start time
                 tmp_a = record[i].timestamp()
@@ -82,13 +81,14 @@ class Manager(abstracts.BaseManager):
                 tmp_b = record[i].timestamp()
                 whole += (tmp_b - tmp_a)
 
-        if len(record) % 2 == 1:
+        if self.is_inprogress(times):
+            # task is in progress
             whole += (
                 dt.now().timestamp() 
-                - record[-1].timestamp()
+                - record[-1].timestamp() # the last start time of task
             )
         
-        return whole
+        return whole # whole time of task
     
     def read(self, lable, raise_error=False):
         self._update_data()
