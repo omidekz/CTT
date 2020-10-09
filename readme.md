@@ -5,7 +5,9 @@
 
 # Usage
 
-        tracker.py [-h] [-d [DB] | -t TOGGLE | -n NEW [NEW ...] | -u UPDATE [UPDATE ...]] [-s STATUS | -a] [-v]
+  __it is not useable yet now. but you be able to use in below structure in the futur__
+
+    tracker.py [-h] [-d [db name] | -t task lable | -n lable(s) [NEW ...] | -u tasl lable [UPDATE ...]] [-s lable | -a] [-v]
 
 # Doc
 
