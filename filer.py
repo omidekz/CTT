@@ -43,8 +43,8 @@ class Manager(abstracts.BaseManager):
     def _to_readresponse(self, lable, data):
         return abstracts.ReadResponse(
             lable,
-            self._calc_time(data),
-            data['times'],
+            whole_time=self._calc_time(data),
+            times=data['times'],
             **data['kwargs']
         )
 
