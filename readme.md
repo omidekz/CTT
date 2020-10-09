@@ -5,6 +5,8 @@
 
 # Usage
 
+        tracker.py [-h] [-d [DB] | -t TOGGLE | -n NEW [NEW ...] | -u UPDATE [UPDATE ...]] [-s STATUS | -a] [-v]
+
 # Doc
 
 - ## abstracts
