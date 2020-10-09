@@ -122,5 +122,5 @@ class Manager(abstracts.BaseManager):
     
     def update(self, lable, key, value):
         if self.exists(lable):
-            self.data[lable]['kwargs']['key'] = value
+            self.data[lable]['kwargs'][key] = value
             self._update_db()
