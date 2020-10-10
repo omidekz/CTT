@@ -1,4 +1,5 @@
 import abc
+from typing import List, Dict
 from argparse import ArgumentParser
 
 class Handler(metaclass=abc.ABCMeta):
@@ -22,9 +23,17 @@ class Handler(metaclass=abc.ABCMeta):
         return self.new
     
     @abc.abstractclassmethod
-    def update(self) -> dict:
+    def update(self) -> Dict:
         pass
     
     @abc.abstractclassmethod
-    def status(self):
+    def status(self) -> List[str | bool]:
+        pass
+
+    @abc.abstractclassmethod
+    def verbose(self) -> bool:
+        pass
+
+    @abc.abstractclassmethod
+    def version(self) -> str:
         pass
