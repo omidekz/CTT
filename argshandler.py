@@ -1,4 +1,4 @@
-from bases.argshandler import Handler
+from core.argshandler import Handler
 
 class CustomHandler(Handler):
     def __init__(self, args):
