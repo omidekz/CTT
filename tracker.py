@@ -1,2 +1,2 @@
 from arger import parser
-import argshandler.Handler
+import argshandler import CustomHandler
