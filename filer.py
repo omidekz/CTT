@@ -2,9 +2,10 @@ import os.path
 from datetime import datetime as dt
 import pickle
 
-from bases import abstracts
+import core.ReadResponse
+import core.BaseManager
 
-class Manager(abstracts.BaseManager):
+class Manager(core.BaseManager):
     def __init__(self, db_path):
         super().__init__(db_path)
         if not os.path.exists(self.db_path):
@@ -42,7 +43,7 @@ class Manager(abstracts.BaseManager):
         return self._to_readresponse(lable, self.data[lable])
     
     def _to_readresponse(self, lable, data):
-        return abstracts.ReadResponse(
+        return core.ReadResponse(
             lable,
             whole_time=self._calc_time(data),
             times=data['times'],
