@@ -1,7 +1,8 @@
 import os.path
 from datetime import datetime as dt
 import pickle
-import abstracts
+
+from bases import abstracts
 
 class Manager(abstracts.BaseManager):
     def __init__(self, db_path):
