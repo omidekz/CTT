@@ -7,4 +7,5 @@ class Core:
         self.args = args
     
     def done(self):
-        pass
+        if self.args.all():
+            pass

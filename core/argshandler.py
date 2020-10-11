@@ -27,7 +27,7 @@ class Handler(metaclass=abc.ABCMeta):
         pass
     
     @abc.abstractclassmethod
-    def status(self) -> List[str | bool]:
+    def status(self) -> str:
         pass
 
     @abc.abstractclassmethod
