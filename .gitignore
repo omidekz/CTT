@@ -3,4 +3,4 @@ __pycache__
 dbs/
 .idea
 venv
-db.sqlite3
+db.sqlite3*
