@@ -15,3 +15,13 @@ class Sqlite:
     @classmethod
     def cursor(cls) -> sqlite3.Cursor:
         return cls.get_connection().cursor()
+
+    @classmethod
+    def simple_execute(cls, query):
+        con = cls.get_connection()
+        try:
+            r = con.cursor().execute(query).fetchall()
+            con.commit()
+            return r
+        except:
+            return None
