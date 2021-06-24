@@ -119,11 +119,15 @@ class Task(BaseModel):
                 'name': 'name'
             },
             'state': '{:<12}',
-            'total_time_seconds': {
+            'time_string': {
                 'format': '{:<9}',
                 'name': 'payed time'
             }
         }
+
+    @property
+    def time_string(self):
+        return self.convert_sec_to_timestring(seconds=self.total_time_seconds)
 
     @staticmethod
     def headline():
@@ -136,8 +140,9 @@ class Task(BaseModel):
 
     def to_inline(self):
         get_format = get_value_by_custom_key('format')
+        get_value = lambda x: x() if callable(x) else x
         return ' '.join(
-            get_format(v, default=v).format(self.__getattribute__(k))
+            get_format(v, default=v).format(get_value(getattr(self, k)))
             for k, v in Task._inline_format().items()
         )
 
